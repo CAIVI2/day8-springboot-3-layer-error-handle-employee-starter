@@ -15,4 +15,12 @@ public class EmployeeRepository {
         employees.add(employee);
         return employee;
     }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void empty() {
+        employees.clear();
+    }
 }

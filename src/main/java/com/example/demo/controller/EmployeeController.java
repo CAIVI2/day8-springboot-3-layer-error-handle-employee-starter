@@ -20,18 +20,11 @@ public class EmployeeController {
         this.employeeservice = employeeservice;
     }
 
-//    @GetMapping
-//    public List<Employee> getEmployees(@RequestParam(required = false) String gender, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
-//        Stream<Employee> stream = employees.stream();
-//        if (gender != null) {
-//            stream = stream.filter(employee -> employee.getGender().compareToIgnoreCase(gender) == 0);
-//        }
-//        if (page != null && size != null) {
-//            stream = stream.skip((long) (page - 1) * size).limit(size);
-//        }
-//        return stream.toList();
-//    }
-//
+    @GetMapping
+    public List<Employee> getEmployees(@RequestParam(required = false) String gender, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+        return employeeservice.getEmployees(gender, page, size);
+    }
+
 //    @GetMapping("/{id}")
 //    public Employee getEmployeeById(@PathVariable int id) {
 //        return employees.stream()
@@ -85,4 +78,9 @@ public class EmployeeController {
 //    public void empty() {
 //        employees.clear();
 //    }
+
+    @DeleteMapping("/all")
+    public void empty() {
+        employeeservice.empty();
+    }
 }
