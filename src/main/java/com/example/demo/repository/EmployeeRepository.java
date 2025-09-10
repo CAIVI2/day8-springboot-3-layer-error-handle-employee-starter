@@ -34,4 +34,12 @@ public class EmployeeRepository {
     public void deleteEmployee(Employee employee) {
         employees.remove(employee);
     }
+
+    public Employee updateEmployee(Employee oldEmployee, Employee updatedEmployee) {
+        oldEmployee.setName(updatedEmployee.getName());
+        oldEmployee.setAge(updatedEmployee.getAge());
+        oldEmployee.setGender(updatedEmployee.getGender());
+        oldEmployee.setSalary(updatedEmployee.getSalary());
+        return oldEmployee;
+    }
 }

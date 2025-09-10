@@ -54,4 +54,13 @@ public class EmployeeService {
         }
         employeeRepository.deleteEmployee(employee);
     }
+
+    public Employee updateEmployee(int id, Employee updatedEmployee) {
+        Employee found = employeeRepository.getEmployeeById(id);
+        if (found == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found with id: " + id);
+        }
+        Employee employee = employeeRepository.updateEmployee(found, updatedEmployee);
+        return employee;
+    }
 }
