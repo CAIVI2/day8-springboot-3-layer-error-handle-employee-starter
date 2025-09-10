@@ -246,4 +246,20 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.age").value(updateEmployee.getAge()))
                 .andExpect(jsonPath("$.salary").value(updateEmployee.getSalary()));
     }
+
+    @Test
+    void should_verify_whether_employee_is_not_active_when_update_an_employee() throws Exception {
+        Gson gson = new Gson();
+        Employee employee = createJohnSmith();
+        Employee updateEmployee = new Employee(null, "John Smith", 50, "MALE", 67000.0);
+
+        mockMvc.perform(delete("/employees/" + employee.getId()))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(put("/employees/" + employee.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(updateEmployee)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Employee with id: " + employee.getId() + " is not active"));
+    }
 }
