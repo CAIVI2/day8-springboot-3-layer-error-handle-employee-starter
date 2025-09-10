@@ -2,7 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Employee;
 import com.example.demo.repository.EmployeeRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -35,5 +37,13 @@ public class EmployeeService {
 
     public void empty() {
         employeeRepository.empty();
+    }
+
+    public Employee getEmployeeById(int id) {
+        Employee employee = employeeRepository.getEmployeeById(id);
+        if (employee == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found with id: " + id);
+        }
+        return employee;
     }
 }

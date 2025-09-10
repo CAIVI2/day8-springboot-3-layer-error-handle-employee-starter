@@ -25,13 +25,10 @@ public class EmployeeController {
         return employeeservice.getEmployees(gender, page, size);
     }
 
-//    @GetMapping("/{id}")
-//    public Employee getEmployeeById(@PathVariable int id) {
-//        return employees.stream()
-//                .filter(employee -> employee.getId() == id)
-//                .findFirst()
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found with id: " + id));
-//    }
+    @GetMapping("/{id}")
+    public Employee getEmployeeById(@PathVariable int id) {
+        return employeeservice.getEmployeeById(id);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

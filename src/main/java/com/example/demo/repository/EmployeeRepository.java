@@ -23,4 +23,11 @@ public class EmployeeRepository {
     public void empty() {
         employees.clear();
     }
+
+    public Employee getEmployeeById(int id) {
+        return employees.stream()
+                .filter(employee -> employee.getId() == id)
+                .findFirst()
+                .orElse(null);
+    }
 }

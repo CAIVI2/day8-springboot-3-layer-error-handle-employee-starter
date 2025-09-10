@@ -60,17 +60,12 @@ public class EmployeeControllerTest {
         return gson.fromJson(responseContent, Employee.class);
     }
 
-//    @BeforeEach
-//    void cleanEmployees() {
-//        employeeController.empty();
-//    }
-
-//    @Test
-//    void should_return_404_when_employee_not_found() throws Exception {
-//        mockMvc.perform(get("/employees/999")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isNotFound());
-//    }
+    @Test
+    void should_return_404_when_employee_not_found() throws Exception {
+        mockMvc.perform(get("/employees/999")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 
     @Test
     void should_return_all_employee() throws Exception {
@@ -83,19 +78,19 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
-//    @Test
-//    void should_return_employee_when_employee_found() throws Exception {
-//        Employee expect = employeeController.createEmployee(johnSmith());
-//
-//        mockMvc.perform(get("/employees/1")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id").value(expect.getId()))
-//                .andExpect(jsonPath("$.name").value(expect.getName()))
-//                .andExpect(jsonPath("$.age").value(expect.getAge()))
-//                .andExpect(jsonPath("$.gender").value(expect.getGender()))
-//                .andExpect(jsonPath("$.salary").value(expect.getSalary()));
-//    }
+    @Test
+    void should_return_employee_when_employee_found() throws Exception {
+        Employee expect = createJohnSmith();
+
+        mockMvc.perform(get("/employees/" + expect.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(expect.getId()))
+                .andExpect(jsonPath("$.name").value(expect.getName()))
+                .andExpect(jsonPath("$.age").value(expect.getAge()))
+                .andExpect(jsonPath("$.gender").value(expect.getGender()))
+                .andExpect(jsonPath("$.salary").value(expect.getSalary()));
+    }
 //
 //    @Test
 //    void should_return_male_employee_when_employee_found() throws Exception {
