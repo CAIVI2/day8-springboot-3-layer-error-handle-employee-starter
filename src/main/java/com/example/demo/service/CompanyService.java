@@ -2,8 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Company;
 import com.example.demo.repository.CompanyRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,5 +33,13 @@ public class CompanyService {
             return companies.subList(start, end);
         }
         return companies;
+    }
+
+    public Company getCompanyById(int id) {
+        Company company = companyRepository.getCompanyById(id);
+        if (company == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found with id: " + id);
+        }
+        return company;
     }
 }

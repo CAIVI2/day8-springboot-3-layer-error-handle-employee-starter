@@ -19,4 +19,8 @@ public class CompanyRepository {
     public List<Company> getCompanies() {
         return companies;
     }
+
+    public Company getCompanyById(int id) {
+        return companies.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+    }
 }

@@ -56,21 +56,21 @@ public class CompanyControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1));
     }
-//
-//    @Test
-//    void should_return_company_when_get_id_found() throws Exception {
-//        Company spring = new Company();
-//        spring.setName("Spring");
-//        Company company = companyController.createCompany(spring);
-//
-//        MockHttpServletRequestBuilder request = get("/companies/" + company.getId())
-//                .contentType(MediaType.APPLICATION_JSON);
-//        mockMvc.perform(request)
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id").value(company.getId()))
-//                .andExpect(jsonPath("$.name").value(company.getName()));
-//    }
-//
+
+    @Test
+    void should_return_company_when_get_id_found() throws Exception {
+        Company spring = new Company();
+        spring.setName("Spring");
+        Company company = companyController.createCompany(spring);
+
+        MockHttpServletRequestBuilder request = get("/companies/" + company.getId())
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(company.getId()))
+                .andExpect(jsonPath("$.name").value(company.getName()));
+    }
+
 //    @Test
 //    void should_return_company_when_put_with_id_found() throws Exception {
 //        Company spring = new Company();
@@ -122,15 +122,15 @@ public class CompanyControllerTest {
                 .andExpect(jsonPath("$.length()").value(5));
     }
 
-//    @Test
-//    void should_status_404_when_get_company_by_id_not_found() throws Exception {
-//        MockHttpServletRequestBuilder request = get("/companies/999")
-//                .contentType(MediaType.APPLICATION_JSON);
-//
-//        mockMvc.perform(request)
-//                .andExpect(status().isNotFound());
-//    }
-//
+    @Test
+    void should_status_404_when_get_company_by_id_not_found() throws Exception {
+        MockHttpServletRequestBuilder request = get("/companies/999")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isNotFound());
+    }
+
 //    @Test
 //    void should_status_404_when_put_company_by_id_not_found() throws Exception {
 //        String requestBody = """
