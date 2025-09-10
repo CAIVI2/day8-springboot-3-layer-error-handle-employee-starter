@@ -51,4 +51,13 @@ public class EmployeeServiceTest {
 
         assertThrows(InvalidAgeEmployeeException.class, () -> employeeService.createEmployee(employee));
     }
+
+    @Test
+    void should_set_employee_active_status_to_true_by_default_when_create_a_employee() {
+        Employee employee = new Employee(1, "Young Guy", 22, "MALE", 1000.0);
+
+        Employee expect = employeeService.createEmployee(employee);
+
+        verify(employeeRepository).createEmployee(argThat(Employee::getActive));
+    }
 }
