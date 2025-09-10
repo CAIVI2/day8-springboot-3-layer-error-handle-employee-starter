@@ -70,4 +70,22 @@ public class EmployeeServiceTest {
 
         verify(employeeRepository).updateEmployee(any(Employee.class), argThat(e -> e.getActive().equals(Boolean.FALSE)));
     }
+
+    @Test
+    void should_verify_whether_employee_is_active_when_update_an_employee() {
+        Employee employee = new Employee(1, "Young Guy", 22, "MALE", 1000.0);
+        Employee updatedEmployee = new Employee(null, "Old Guy", 52, "MALE", 50000.0);
+        employee.setActive(Boolean.TRUE);
+        updatedEmployee.setActive(Boolean.TRUE);
+
+        when(employeeRepository.getEmployeeById(employee.getId())).thenReturn(employee);
+
+        employeeService.updateEmployee(employee.getId(), updatedEmployee);
+
+        verify(employeeRepository).updateEmployee(any(Employee.class), argThat(e ->
+                e.getName().equals(updatedEmployee.getName())
+                        && e.getAge().equals(updatedEmployee.getAge())
+                        && e.getSalary().equals(updatedEmployee.getSalary())
+                        && e.getActive().equals(Boolean.TRUE)));
+    }
 }
