@@ -88,4 +88,15 @@ public class EmployeeServiceTest {
                         && e.getSalary().equals(updatedEmployee.getSalary())
                         && e.getActive().equals(Boolean.TRUE)));
     }
+
+    @Test
+    void should_verify_whether_employee_is_not_active_when_update_an_employee() {
+        Employee employee = new Employee(1, "Young Guy", 22, "MALE", 1000.0);
+        employee.setActive(Boolean.FALSE);
+        Employee updatedEmployee = new Employee(null, "Old Guy", 52, "MALE", 50000.0);
+
+        when(employeeRepository.getEmployeeById(employee.getId())).thenReturn(employee);
+
+        assertThrows(InvalidActiveEmployeeException.class, () -> employeeService.updateEmployee(employee.getId(), updatedEmployee));
+    }
 }
