@@ -27,6 +27,7 @@ public class EmployeeService {
         if (employee.getAge() < 18 || employee.getAge() > 65) {
             throw new InvalidAgeEmployeeException( "Employee age must be greater than 18 and less than 65");
         }
+        employee.setActive(true);
         return employeeRepository.createEmployee(employee);
     }
 

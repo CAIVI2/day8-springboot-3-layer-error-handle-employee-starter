@@ -205,4 +205,17 @@ public class EmployeeControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Employee age must be greater than 18 and less than 65"));
     }
+
+    @Test
+    void should_set_employee_active_status_to_true_by_default_when_create_a_employee() throws Exception {
+        Gson gson = new Gson();
+        Employee expect = johnSmith();
+        String john = gson.toJson(expect);
+
+        mockMvc.perform(post("/employees")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(john))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.active").value(true));
+    }
 }
