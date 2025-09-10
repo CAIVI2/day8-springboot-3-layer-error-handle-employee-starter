@@ -42,4 +42,12 @@ public class CompanyService {
         }
         return company;
     }
+
+    public void deleteCompany(int id) {
+        Company company = companyRepository.getCompanyById(id);
+        if (company == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found with id: " + id);
+        }
+        companyRepository.deleteCompany(company);
+    }
 }

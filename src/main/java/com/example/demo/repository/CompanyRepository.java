@@ -23,4 +23,8 @@ public class CompanyRepository {
     public Company getCompanyById(int id) {
         return companies.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
     }
+
+    public void deleteCompany(Company company) {
+        companies.remove(company);
+    }
 }
