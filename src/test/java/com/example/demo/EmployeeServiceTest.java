@@ -60,4 +60,14 @@ public class EmployeeServiceTest {
 
         verify(employeeRepository).createEmployee(argThat(Employee::getActive));
     }
+
+    @Test
+    void should_simply_sets_the_employee_active_status_to_false_when_delete_a_employee() {
+        Employee employee = new Employee(1, "Young Guy", 22, "MALE", 1000.0);
+        when(employeeRepository.getEmployeeById(employee.getId())).thenReturn(employee);
+
+        employeeService.deleteEmployee(employee.getId());
+
+        verify(employeeRepository).updateEmployee(any(Employee.class), argThat(e -> e.getActive().equals(Boolean.FALSE)));
+    }
 }
