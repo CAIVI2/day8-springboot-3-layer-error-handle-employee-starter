@@ -4,12 +4,7 @@ import com.example.demo.entity.Employee;
 import com.example.demo.service.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/employees")
@@ -47,10 +42,6 @@ public class EmployeeController {
     public void deleteEmployee(@PathVariable int id) {
         employeeservice.deleteEmployee(id);
     }
-
-//    public void empty() {
-//        employees.clear();
-//    }
 
     @DeleteMapping("/all")
     public void empty() {
