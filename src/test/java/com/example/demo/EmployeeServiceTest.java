@@ -37,4 +37,11 @@ public class EmployeeServiceTest {
                 && e.getSalary().equals(employee.getSalary())
                 && e.getActive().equals(Boolean.TRUE)));
     }
+
+    @Test
+    void should_throw_exception_when_create_a_employee_of_greater_than_65_or_less_then_18() {
+        Employee employee = new Employee(null, "Old Guy", 70, "MALE", 50000.0);
+
+        assertThrows(InvalidAgeEmployeeException.class, () -> employeeService.createEmployee(employee));
+    }
 }
