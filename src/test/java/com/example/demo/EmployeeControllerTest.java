@@ -192,4 +192,17 @@ public class EmployeeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(5));
     }
+
+    @Test
+    void should_throw_exception_when_create_a_employee_of_greater_than_65_or_less_than_18() throws Exception {
+        Gson gson = new Gson();
+        Employee expect = johnSmith();
+        expect.setAge(10);
+        String john = gson.toJson(expect);
+        mockMvc.perform(post("/employees")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(john))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Employee age must be greater than 18 and less than 65"));
+    }
 }
