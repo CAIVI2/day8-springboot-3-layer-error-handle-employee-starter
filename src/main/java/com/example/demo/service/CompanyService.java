@@ -50,4 +50,16 @@ public class CompanyService {
         }
         companyRepository.deleteCompany(company);
     }
+
+    public Company updateCompany(int id, Company updatedCompany) {
+        Company company = companyRepository.getCompanyById(id);
+        if (company == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found with id: " + id);
+        }
+        return companyRepository.updateCompany(company, updatedCompany);
+    }
+
+    public void empty() {
+        companyRepository.empty();
+    }
 }

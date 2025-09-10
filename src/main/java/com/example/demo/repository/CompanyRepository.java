@@ -1,6 +1,7 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.Company;
+import com.example.demo.entity.Employee;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -26,5 +27,14 @@ public class CompanyRepository {
 
     public void deleteCompany(Company company) {
         companies.remove(company);
+    }
+
+    public Company updateCompany(Company company, Company updatedCompany) {
+        company.setName(updatedCompany.getName());
+        return company;
+    }
+
+    public void empty() {
+        companies.clear();
     }
 }
