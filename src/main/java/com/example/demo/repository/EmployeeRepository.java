@@ -30,4 +30,8 @@ public class EmployeeRepository {
                 .findFirst()
                 .orElse(null);
     }
+
+    public void deleteEmployee(Employee employee) {
+        employees.remove(employee);
+    }
 }
