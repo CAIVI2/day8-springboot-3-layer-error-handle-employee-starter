@@ -218,4 +218,17 @@ public class EmployeeControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.active").value(true));
     }
+
+    @Test
+    void should_simply_sets_the_employee_active_status_to_false_when_delete_a_employee() throws Exception {
+        Employee expect = createJohnSmith();
+
+        mockMvc.perform(delete("/employees/" + expect.getId()))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/employees/" + expect.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.active").value(false));
+    }
 }
