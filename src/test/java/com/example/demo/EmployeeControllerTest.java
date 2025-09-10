@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import com.example.demo.controller.EmployeeController;
+import com.example.demo.entity.Employee;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -38,10 +42,10 @@ public class EmployeeControllerTest {
         return employee("Jane Doe", 22, "FEMALE", 60000.0);
     }
 
-    @BeforeEach
-    void cleanEmployees() {
-        employeeController.empty();
-    }
+//    @BeforeEach
+//    void cleanEmployees() {
+//        employeeController.empty();
+//    }
 
     @Test
     void should_return_404_when_employee_not_found() throws Exception {
