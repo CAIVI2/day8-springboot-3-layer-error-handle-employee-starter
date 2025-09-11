@@ -1,6 +1,7 @@
 package com.example.demo;
 
-import com.example.demo.entity.Company;
+import com.example.demo.dto.CompanyRequest;
+import com.example.demo.dto.CompanyResponse;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,16 +33,16 @@ public class CompanyControllerTest {
         jdbcTemplate.execute("ALTER TABLE company AUTO_INCREMENT = 1;");
     }
 
-    private static Company spring() {
-        return new Company(null, "Spring");
+    private static CompanyRequest springRequest() {
+        return new CompanyRequest("Spring");
     }
 
-    private Company createSpring() throws Exception {
+    private CompanyResponse createSpring() throws Exception {
         Gson gson = new Gson();
-        String spring = gson.toJson(spring());
+        String spring = gson.toJson(springRequest());
         MvcResult result = mockMvc.perform(post("/companies").contentType(MediaType.APPLICATION_JSON).content(spring)).andReturn();
         String responseContent = result.getResponse().getContentAsString();
-        return gson.fromJson(responseContent, Company.class);
+        return gson.fromJson(responseContent, CompanyResponse.class);
     }
 
     @Test
@@ -64,7 +65,7 @@ public class CompanyControllerTest {
 
     @Test
     void should_return_all_companies_when_no_param() throws Exception {
-        Company spring = createSpring();
+        createSpring();
 
         mockMvc.perform(get("/companies").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -73,7 +74,7 @@ public class CompanyControllerTest {
 
     @Test
     void should_return_company_when_get_id_found() throws Exception {
-        Company company = createSpring();
+        CompanyResponse company = createSpring();
 
         MockHttpServletRequestBuilder request = get("/companies/" + company.getId())
                 .contentType(MediaType.APPLICATION_JSON);
@@ -85,7 +86,7 @@ public class CompanyControllerTest {
 
     @Test
     void should_return_company_when_put_with_id_found() throws Exception {
-        Company company = createSpring();
+        CompanyResponse company = createSpring();
         String requestBody = """
                 {
                     "name": "Spring2"
@@ -103,7 +104,7 @@ public class CompanyControllerTest {
 
     @Test
     void should_return_no_content_when_delete_id_found() throws Exception {
-        Company company = createSpring();
+        CompanyResponse company = createSpring();
 
         MockHttpServletRequestBuilder request = delete("/companies/" + company.getId())
                 .contentType(MediaType.APPLICATION_JSON);
