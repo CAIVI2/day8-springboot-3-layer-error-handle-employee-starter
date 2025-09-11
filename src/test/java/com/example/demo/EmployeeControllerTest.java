@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import com.example.demo.dto.EmployeeRequest;
+import com.example.demo.dto.EmployeeResponse;
 import com.example.demo.entity.Employee;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,29 +33,20 @@ public class EmployeeControllerTest {
         jdbcTemplate.execute("ALTER TABLE employee AUTO_INCREMENT = 1;");
     }
 
-    private static Employee employee(String name, int age, String gender, double salary) {
-        Employee e = new Employee();
-        e.setName(name);
-        e.setAge(age);
-        e.setGender(gender);
-        e.setSalary(salary);
-        return e;
+    private static EmployeeRequest johnSmith() {
+        return new EmployeeRequest("John Smith", 28, "MALE", 60000.0);
     }
 
-    private static Employee johnSmith() {
-        return employee("John Smith", 28, "MALE", 60000.0);
+    private static EmployeeRequest janeDoe() {
+        return new EmployeeRequest("Jane Doe", 22, "FEMALE", 60000.0);
     }
 
-    private static Employee janeDoe() {
-        return employee("Jane Doe", 22, "FEMALE", 60000.0);
-    }
-
-    private Employee createJohnSmith() throws Exception {
+    private EmployeeResponse createJohnSmith() throws Exception {
         Gson gson = new Gson();
         String John = gson.toJson(johnSmith());
         MvcResult result = mockMvc.perform(post("/employees").contentType(MediaType.APPLICATION_JSON).content(John)).andReturn();
         String responseContent = result.getResponse().getContentAsString();
-        return gson.fromJson(responseContent, Employee.class);
+        return gson.fromJson(responseContent, EmployeeResponse.class);
     }
 
     private Employee createJaneDoe() throws Exception {
@@ -84,7 +77,7 @@ public class EmployeeControllerTest {
 
     @Test
     void should_return_employee_when_employee_found() throws Exception {
-        Employee expect = createJohnSmith();
+        EmployeeResponse expect = createJohnSmith();
 
         mockMvc.perform(get("/employees/" + expect.getId())
                         .contentType(MediaType.APPLICATION_JSON))
@@ -97,7 +90,7 @@ public class EmployeeControllerTest {
 
     @Test
     void should_return_male_employee_when_employee_found() throws Exception {
-        Employee expect = createJohnSmith();
+        EmployeeResponse expect = createJohnSmith();
         createJaneDoe();
 
         mockMvc.perform(get("/employees?gender=male")
@@ -141,7 +134,7 @@ public class EmployeeControllerTest {
 
     @Test
     void should_return_200_with_employee_list() throws Exception {
-        Employee expect = createJohnSmith();
+        EmployeeResponse expect = createJohnSmith();
 
         mockMvc.perform(get("/employees")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -163,7 +156,7 @@ public class EmployeeControllerTest {
 
     @Test
     void should_status_200_when_update_employee() throws Exception {
-        Employee oldEmployee = createJohnSmith();
+        EmployeeResponse oldEmployee = createJohnSmith();
         Gson gson = new Gson();
         Employee newEmploy = new Employee(null, "John Smith", 29, "MALE", 65000.0);
         String requestBody = gson.toJson(newEmploy);
@@ -195,7 +188,7 @@ public class EmployeeControllerTest {
     @Test
     void should_throw_exception_when_create_a_employee_of_greater_than_65_or_less_than_18() throws Exception {
         Gson gson = new Gson();
-        Employee expect = johnSmith();
+        EmployeeRequest expect = johnSmith();
         expect.setAge(10);
         String john = gson.toJson(expect);
         mockMvc.perform(post("/employees")
@@ -208,7 +201,7 @@ public class EmployeeControllerTest {
     @Test
     void should_throw_exception_when_create_a_employee_of_greater_than_30_and_salary_less_than_20000() throws Exception {
         Gson gson = new Gson();
-        Employee expect = johnSmith();
+        EmployeeRequest expect = johnSmith();
         expect.setAge(35);
         expect.setSalary(15000.0);
         String john = gson.toJson(expect);
@@ -223,7 +216,7 @@ public class EmployeeControllerTest {
     @Test
     void should_set_employee_active_status_to_true_by_default_when_create_a_employee() throws Exception {
         Gson gson = new Gson();
-        Employee expect = johnSmith();
+        EmployeeRequest expect = johnSmith();
         String john = gson.toJson(expect);
 
         mockMvc.perform(post("/employees")
@@ -235,7 +228,7 @@ public class EmployeeControllerTest {
 
     @Test
     void should_simply_sets_the_employee_active_status_to_false_when_delete_a_employee() throws Exception {
-        Employee expect = createJohnSmith();
+        EmployeeResponse expect = createJohnSmith();
 
         mockMvc.perform(delete("/employees/" + expect.getId()))
                 .andExpect(status().isNoContent());
@@ -249,7 +242,7 @@ public class EmployeeControllerTest {
     @Test
     void should_verify_whether_employee_is_active_when_update_an_employee() throws Exception {
         Gson gson = new Gson();
-        Employee employee = createJohnSmith();
+        EmployeeResponse employee = createJohnSmith();
         Employee updateEmployee = new Employee(null, "John Smith", 50, "MALE", 67000.0);
 
         mockMvc.perform(put("/employees/" + employee.getId())
@@ -263,7 +256,7 @@ public class EmployeeControllerTest {
     @Test
     void should_verify_whether_employee_is_not_active_when_update_an_employee() throws Exception {
         Gson gson = new Gson();
-        Employee employee = createJohnSmith();
+        EmployeeResponse employee = createJohnSmith();
         Employee updateEmployee = new Employee(null, "John Smith", 50, "MALE", 67000.0);
 
         mockMvc.perform(delete("/employees/" + employee.getId()))
