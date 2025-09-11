@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.CompanyRequest;
+import com.example.demo.dto.mapper.CompanyMapper;
 import com.example.demo.entity.Company;
 import com.example.demo.repository.ICompanyRepository;
 import org.springframework.data.domain.PageRequest;
@@ -19,8 +21,8 @@ public class CompanyService {
         this.companyRepository = companyRepository;
     }
 
-    public Company createCompany(Company company) {
-        return companyRepository.save(company);
+    public Company createCompany(CompanyRequest companyRequest) {
+        return companyRepository.save(CompanyMapper.toEntity(companyRequest));
     }
 
     public List<Company> getCompanies(Integer page, Integer size) {
@@ -45,9 +47,10 @@ public class CompanyService {
         companyRepository.delete(company);
     }
 
-    public Company updateCompany(int id, Company updatedCompany) {
+    public Company updateCompany(int id, CompanyRequest companyRequest) {
         Company company = getCompanyById(id);
-        updatedCompany.setId(id);
-        return companyRepository.save(updatedCompany);
+        Company entity = CompanyMapper.toEntity(companyRequest);
+        entity.setId(company.getId());
+        return companyRepository.save(entity);
     }
 }
