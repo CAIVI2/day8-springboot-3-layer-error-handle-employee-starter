@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.EmployeeRequest;
+import com.example.demo.dto.mapper.EmployeeMapper;
 import com.example.demo.entity.Employee;
 import com.example.demo.exception.InvalidActiveEmployeeException;
 import com.example.demo.exception.InvalidAgeEmployeeException;
@@ -23,18 +25,18 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public Employee createEmployee(Employee employee) {
-        if (employee == null || employee.getAge() == null) {
+    public Employee createEmployee(EmployeeRequest employeeRequest) {
+        if (employeeRequest == null || employeeRequest.getAge() == null) {
             throw new InvalidAgeEmployeeException("Employee age cannot be null");
         }
-        if (employee.getAge() < 18 || employee.getAge() > 65) {
+        if (employeeRequest.getAge() < 18 || employeeRequest.getAge() > 65) {
             throw new InvalidAgeEmployeeException("Employee age must be greater than 18 and less than 65");
         }
-        if (employee.getAge() >= 30 && (employee.getSalary() == null || employee.getSalary() < 20000)) {
+        if (employeeRequest.getAge() >= 30 && (employeeRequest.getSalary() == null || employeeRequest.getSalary() < 20000)) {
             throw new InvalidSalaryEmployeeException("Employee age greater than or equal 30 and salary must be greater than 20000");
         }
-        employee.setActive(true);
-        return employeeRepository.save(employee);
+        employeeRequest.setActive(true);
+        return employeeRepository.save(EmployeeMapper.toEntity(employeeRequest));
     }
 
     public List<Employee> getEmployees(String gender, Integer page, Integer size) {
@@ -69,13 +71,14 @@ public class EmployeeService {
         employeeRepository.save(employee);
     }
 
-    public Employee updateEmployee(int id, Employee updatedEmployee) {
+    public Employee updateEmployee(int id, EmployeeRequest employeeRequest) {
         Employee found = getEmployeeById(id);
         if (found.getActive() == null || Boolean.FALSE.equals(found.getActive())) {
             throw new InvalidActiveEmployeeException("Employee with id: " + id + " is not active");
         }
-        updatedEmployee.setId(id);
-        employeeRepository.save(updatedEmployee);
+        Employee entity = EmployeeMapper.toEntity(employeeRequest);
+        entity.setId(id);
+        employeeRepository.save(entity);
         return found;
     }
 }

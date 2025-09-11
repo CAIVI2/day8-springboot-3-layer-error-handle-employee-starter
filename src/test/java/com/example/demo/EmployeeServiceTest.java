@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.dto.EmployeeRequest;
 import com.example.demo.entity.Employee;
 import com.example.demo.exception.InvalidActiveEmployeeException;
 import com.example.demo.exception.InvalidAgeEmployeeException;
@@ -27,36 +28,36 @@ public class EmployeeServiceTest {
 
     @Test
     void should_throw_exception_when_create_a_employee() {
-        Employee employee = new Employee(null, "Young Guy", 20, "MALE", 50000.0);
+        EmployeeRequest employeeRequest = new EmployeeRequest("Young Guy", 20, "MALE", 50000.0);
 
-        employeeService.createEmployee(employee);
+        employeeService.createEmployee(employeeRequest);
 
-        verify(employeeRepository).save(argThat(e -> e.getName().equals(employee.getName())
-                && e.getAge().equals(employee.getAge())
-                && e.getGender().equals(employee.getGender())
-                && e.getSalary().equals(employee.getSalary())
+        verify(employeeRepository).save(argThat(e -> e.getName().equals(employeeRequest.getName())
+                && e.getAge().equals(employeeRequest.getAge())
+                && e.getGender().equals(employeeRequest.getGender())
+                && e.getSalary().equals(employeeRequest.getSalary())
                 && e.getActive().equals(Boolean.TRUE)));
     }
 
     @Test
     void should_throw_exception_when_create_a_employee_of_greater_than_65_or_less_then_18() {
-        Employee employee = new Employee(null, "Old Guy", 70, "MALE", 50000.0);
+        EmployeeRequest employeeRequest = new EmployeeRequest( "Old Guy", 70, "MALE", 50000.0);
 
-        assertThrows(InvalidAgeEmployeeException.class, () -> employeeService.createEmployee(employee));
+        assertThrows(InvalidAgeEmployeeException.class, () -> employeeService.createEmployee(employeeRequest));
     }
 
     @Test
     void should_throw_exception_when_create_a_employee_of_age_greater_than_or_equal_30_and_salary_must_not_less_than_20000() {
-        Employee employee = new Employee(null, "Old Guy", 60, "MALE", 10000.0);
+        EmployeeRequest employeeRequest = new EmployeeRequest("Old Guy", 60, "MALE", 10000.0);
 
-        assertThrows(InvalidSalaryEmployeeException.class, () -> employeeService.createEmployee(employee));
+        assertThrows(InvalidSalaryEmployeeException.class, () -> employeeService.createEmployee(employeeRequest));
     }
 
     @Test
     void should_set_employee_active_status_to_true_by_default_when_create_a_employee() {
-        Employee employee = new Employee(1, "Young Guy", 22, "MALE", 1000.0);
+        EmployeeRequest employeeRequest = new EmployeeRequest("Young Guy", 22, "MALE", 1000.0);
 
-        Employee expect = employeeService.createEmployee(employee);
+        Employee expect = employeeService.createEmployee(employeeRequest);
 
         verify(employeeRepository).save(argThat(Employee::getActive));
     }
@@ -74,15 +75,15 @@ public class EmployeeServiceTest {
     @Test
     void should_verify_whether_employee_is_active_when_update_an_employee() {
         Employee employee = new Employee(1, "Young Guy", 22, "MALE", 1000.0, Boolean.TRUE);
-        Employee updatedEmployee = new Employee(null, "Old Guy", 52, "MALE", 50000.0, Boolean.TRUE);
+        EmployeeRequest employeeRequest = new EmployeeRequest("Old Guy", 52, "MALE", 50000.0, Boolean.TRUE);
         when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
 
-        employeeService.updateEmployee(employee.getId(), updatedEmployee);
+        employeeService.updateEmployee(employee.getId(), employeeRequest);
 
         verify(employeeRepository).save(argThat(e ->
-                e.getName().equals(updatedEmployee.getName())
-                        && e.getAge().equals(updatedEmployee.getAge())
-                        && e.getSalary().equals(updatedEmployee.getSalary())
+                e.getName().equals(employeeRequest.getName())
+                        && e.getAge().equals(employeeRequest.getAge())
+                        && e.getSalary().equals(employeeRequest.getSalary())
                         && e.getActive().equals(Boolean.TRUE)));
     }
 
@@ -90,10 +91,10 @@ public class EmployeeServiceTest {
     void should_verify_whether_employee_is_not_active_when_update_an_employee() {
         Employee employee = new Employee(1, "Young Guy", 22, "MALE", 1000.0);
         employee.setActive(Boolean.FALSE);
-        Employee updatedEmployee = new Employee(null, "Old Guy", 52, "MALE", 50000.0);
+        EmployeeRequest employeeRequest = new EmployeeRequest("Old Guy", 52, "MALE", 50000.0);
 
         when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
 
-        assertThrows(InvalidActiveEmployeeException.class, () -> employeeService.updateEmployee(employee.getId(), updatedEmployee));
+        assertThrows(InvalidActiveEmployeeException.class, () -> employeeService.updateEmployee(employee.getId(), employeeRequest));
     }
 }
