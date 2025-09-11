@@ -27,7 +27,8 @@ public class EmployeeControllerTest {
 
     @BeforeEach
     void setUp() {
-        jdbcTemplate.execute("truncate table employee;");
+        jdbcTemplate.execute("delete from employee;");
+        jdbcTemplate.execute("ALTER TABLE employee AUTO_INCREMENT = 1;");
     }
 
     private static Employee employee(String name, int age, String gender, double salary) {
