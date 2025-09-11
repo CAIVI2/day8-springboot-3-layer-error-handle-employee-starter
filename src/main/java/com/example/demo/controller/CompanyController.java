@@ -1,7 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.CompanyRequest;
-import com.example.demo.entity.Company;
+import com.example.demo.dto.CompanyResponse;
+import com.example.demo.dto.mapper.CompanyMapper;
 import com.example.demo.service.CompanyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,26 +18,26 @@ public class CompanyController {
     }
 
     @GetMapping
-    public List<Company> getCompanies(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
-        return companyService.getCompanies(page, size);
+    public List<CompanyResponse> getCompanies(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+        return CompanyMapper.toResponses(companyService.getCompanies(page, size));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Company createCompany(@RequestBody CompanyRequest companyRequest) {
-        return companyService.createCompany(companyRequest);
+    public CompanyResponse createCompany(@RequestBody CompanyRequest companyRequest) {
+        return CompanyMapper.toResponse(companyService.createCompany(companyRequest));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Company updateCompany(@PathVariable int id, @RequestBody CompanyRequest companyRequest) {
-        return  companyService.updateCompany(id, companyRequest);
+    public CompanyResponse updateCompany(@PathVariable int id, @RequestBody CompanyRequest companyRequest) {
+        return  CompanyMapper.toResponse(companyService.updateCompany(id, companyRequest));
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Company getCompanyById(@PathVariable int id) {
-        return companyService.getCompanyById(id);
+    public CompanyResponse getCompanyById(@PathVariable int id) {
+        return CompanyMapper.toResponse(companyService.getCompanyById(id));
     }
 
     @DeleteMapping("/{id}")
