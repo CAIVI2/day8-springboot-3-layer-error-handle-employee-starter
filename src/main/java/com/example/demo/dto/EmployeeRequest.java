@@ -1,9 +1,14 @@
 package com.example.demo.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 public class EmployeeRequest {
     private String name;
     private Integer age;
+    @NotNull(message = "Gender cannot be null")
     private String gender;
+    @Min(value = 0, message = "Salary must be positive number")
     private Double salary;
     private Boolean active;
 
