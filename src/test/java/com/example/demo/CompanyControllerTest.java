@@ -28,7 +28,8 @@ public class CompanyControllerTest {
 
     @BeforeEach
     void cleanCompanies() throws Exception {
-        jdbcTemplate.execute("truncate table company;");
+        jdbcTemplate.execute("delete from company;");
+        jdbcTemplate.execute("ALTER TABLE company AUTO_INCREMENT = 1;");
     }
 
     private static Company spring() {
