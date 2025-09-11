@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.example.demo.controller.EmployeeController;
 import com.example.demo.entity.Employee;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -22,9 +22,12 @@ public class EmployeeControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     @BeforeEach
-    void setUp() throws Exception {
-        mockMvc.perform(delete("/employees/all"));
+    void setUp() {
+        jdbcTemplate.execute("truncate table employee;");
     }
 
     private static Employee employee(String name, int age, String gender, double salary) {
@@ -204,6 +207,21 @@ public class EmployeeControllerTest {
                         .content(john))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Employee age must be greater than 18 and less than 65"));
+    }
+
+    @Test
+    void should_throw_exception_when_create_a_employee_of_greater_than_30_and_salary_less_than_20000() throws Exception {
+        Gson gson = new Gson();
+        Employee expect = johnSmith();
+        expect.setAge(35);
+        expect.setSalary(15000.0);
+        String john = gson.toJson(expect);
+
+        mockMvc.perform(post("/employees")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(john))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Employee age greater than or equal 30 and salary must be greater than 20000"));
     }
 
     @Test
