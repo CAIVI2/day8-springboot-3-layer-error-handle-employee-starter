@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 public class CompanyRequest {
     @NotNull(message = "Name cannot be null")
     private String name;
-    private List<EmployeeRequest> employees;
+    private List<@Valid EmployeeRequest> employees;
 
     public CompanyRequest() {
     }

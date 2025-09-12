@@ -5,6 +5,7 @@ import com.example.demo.dto.CompanyResponse;
 import com.example.demo.dto.mapper.CompanyMapper;
 import com.example.demo.service.CompanyService;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -24,13 +25,13 @@ public class CompanyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CompanyResponse createCompany(@RequestBody CompanyRequest companyRequest) {
+    public CompanyResponse createCompany(@RequestBody @Validated CompanyRequest companyRequest) {
         return CompanyMapper.toResponse(companyService.createCompany(companyRequest));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CompanyResponse updateCompany(@PathVariable int id, @RequestBody CompanyRequest companyRequest) {
+    public CompanyResponse updateCompany(@PathVariable int id, @RequestBody @Validated CompanyRequest companyRequest) {
         return  CompanyMapper.toResponse(companyService.updateCompany(id, companyRequest));
     }
 
