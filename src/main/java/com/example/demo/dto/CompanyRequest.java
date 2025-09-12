@@ -2,7 +2,6 @@ package com.example.demo.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-
 import java.util.List;
 
 public class CompanyRequest {
